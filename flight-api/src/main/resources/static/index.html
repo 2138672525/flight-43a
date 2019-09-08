@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>机票报价系统首页</title>
+
+    <!-- Bootstrap -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/price.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="page-header">
+    <h1 align="center">机票报价系统 <small>天海广纳版</small></h1>
+</div>
+<div class="container" id="main">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4 form-inline">
+            <span>出发城市:</span><input type="text" id="origin" class="form-control" placeholder="BJS">
+        </div>
+        <div class="col-md-4 form-inline">
+            <span>到达城市:</span><input type="text" id="dest" class="form-control" placeholder="BKK">
+        </div>
+        <div class="col-md-2"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-4 form-inline">
+            <span>去程日期:</span><input type="text" id="goDate" class="form-control" placeholder="2019-05-20">
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3">
+            <button type="button" id="search" class="btn btn-success">搜索</button>
+        </div>
+    </div>
+    <div class="row">
+        <hr/>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+            航班信息
+        </div>
+        <div class="col-md-1">
+            起飞时间
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-1">
+            到达时间
+        </div>
+        <div class="col-md-1">
+            退改签
+        </div>
+        <div class="col-md-1">
+            行李额
+        </div>
+        <div class="col-md-1">
+            价格
+        </div>
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <hr/>
+    </div>
+
+
+</div>
+<script src="js/jquery.min.js"></script>
+<script>
+    function parseHtml(flight){
+        var html = "<div class=\"row price-row\">\n" +
+            "        <div class=\"col-md-1\"></div>\n" +
+            "        <div class=\"col-md-2\">\n" +
+            "            <span>中国国航"+flight.carrier+flight.flightNo+"</span><br>\n" +
+            "            <span class=\"word-color-gray\">"+flight.aircraft+"</span>\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            <span >"+flight.departTime+"</span><br/>\n" +
+            "            <span class=\"word-color-gray\">"+flight.origin+"</span>\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            <span class=\"glyphicon glyphicon-arrow-right\"></span>\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            <span>"+flight.arrivalTime+"<span><br/>\n" +
+            "            <span class=\"word-color-gray\">"+flight.dest+"</span>\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            "+flight.rule+"\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            "+flight.baggage+"\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            "+flight.price+"\n" +
+            "        </div>\n" +
+            "        <div class=\"col-md-1\">\n" +
+            "            <button type=\"button\" class=\"btn btn-success\">购买</button>\n" +
+            "        </div>\n" +
+            "    </div>";
+        return html;
+    }
+
+    function clear(){
+        var i = 0;
+        $(".row").each(function () {
+            if(i>5) {
+                $(this).remove();
+            }
+            i++;
+        });
+    }
+
+    $("#search").click(function () {
+        var origin = $("#origin").val();
+        var dest = $("#dest").val();
+        var departDate = $("#goDate").val();
+        var url = "getFlight?origin=" + origin +"&dest="+dest+"&departDate="+departDate;
+        clear();
+        $.get(url, function (data) {
+            var list = data.data;
+            var html = "";
+            for(var i=0;i<list.length;i++){
+                var tmp = list[i];
+                html += parseHtml(tmp);
+            }
+            $("#main").append(html);
+        });
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
